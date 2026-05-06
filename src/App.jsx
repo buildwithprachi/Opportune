@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import Internships from "./pages/Internships"
-import SavedJobs from "./pages/Profile"
+import Profile from "./pages/Profile"
+import Login from "./pages/Login"
 
 function App() {
   return (
@@ -11,8 +12,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/saved" element={<SavedJobs />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/internships" element={<Internships />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   )
