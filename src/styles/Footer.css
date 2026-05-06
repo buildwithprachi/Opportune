@@ -1,0 +1,33 @@
+.footer {
+  margin-top: 100px;
+  padding: 40px 20px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: white;
+}
+
+.footer-logo {
+  color: #2563eb;
+  font-size: 36px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #4b5563;
+  font-size: 16px;
+}
+
+.footer-copy {
+  color: #6b7280;
+  font-size: 15px;
+}
