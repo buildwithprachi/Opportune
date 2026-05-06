@@ -1,8 +1,45 @@
+import { useEffect, useState } from "react"
 import "../styles/Internships.css"
 import Footer from "../components/Footer"
+import { getJobs } from "../jobs"
 
 function Internships() {
+
+  const [jobs, setJobs] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+
+      try {
+
+        const result = await getJobs()
+
+        console.log("FINAL JOBS:", result)
+
+        setJobs(result)
+
+      } catch (error) {
+
+        console.error("FETCH ERROR:", error)
+
+      } finally {
+
+        setLoading(false)
+
+      }
+
+    }
+
+    fetchData()
+
+  }, [])
+
+  console.log(jobs)
+
   return (
+
     <div className="internships-page">
 
       <div className="internships-container">
@@ -77,149 +114,72 @@ function Internships() {
 
             <h1>Software Engineering Internships</h1>
 
-            <p>Showing 142 results</p>
+            <p>
+              Showing {jobs.length} results
+            </p>
 
           </div>
 
+          {loading && <p>Loading internships...</p>}
+
+          {!loading && jobs.length === 0 && (
+            <p>No internships found</p>
+          )}
+
           <div className="internship-cards">
 
-            <div className="internship-card">
+            {!loading && jobs.length > 0 && jobs.map((job, index) => (
 
-              <div className="card-top">
+              <div className="internship-card" key={index}>
 
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
-                  alt="logo"
-                />
+                <div className="card-top">
 
-                <span className="tag new">NEW</span>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
+                    alt="logo"
+                  />
 
-              </div>
+                  <span className="tag new">
+                    NEW
+                  </span>
 
-              <h3>Frontend Developer Intern</h3>
+                </div>
 
-              <h4>TechFlow Inc.</h4>
+                <h3>{job.title}</h3>
 
-              <div className="card-tags">
-                <span>Remote</span>
-                <span>$4,000/mo</span>
-                <span>3 Months</span>
-              </div>
+                <h4>{job.company_name}</h4>
 
-              <p>
-                Join our core product team to build responsive user interfaces
-                using React and modern frontend technologies.
-              </p>
+                <div className="card-tags">
 
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
+                  <span>{job.location}</span>
 
-            </div>
+                  <span>
+                    Internship
+                  </span>
 
-            <div className="internship-card">
+                </div>
 
-              <div className="card-top">
+                <p>
+                  Explore this exciting opportunity and apply
+                  directly through the provided link.
+                </p>
 
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/2721/2721297.png"
-                  alt="logo"
-                />
+                <div className="card-buttons">
 
-                <span className="tag">HOT</span>
+                  <a
+                    href={job.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="apply-btn"
+                  >
+                    Apply Now
+                  </a>
 
-              </div>
-
-              <h3>Machine Learning Intern</h3>
-
-              <h4>DataSys Analytics</h4>
-
-              <div className="card-tags">
-                <span>San Francisco</span>
-                <span>$6,500/mo</span>
-                <span>6 Months</span>
-              </div>
-
-              <p>
-                Help build predictive models and work on next-generation AI
-                systems with our experienced ML team.
-              </p>
-
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
-
-            </div>
-
-            <div className="internship-card">
-
-              <div className="card-top">
-
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
-                  alt="logo"
-                />
-
-                <span className="tag urgent">URGENT</span>
+                </div>
 
               </div>
 
-              <h3>Backend Engineering Intern</h3>
-
-              <h4>CloudNet Solutions</h4>
-
-              <div className="card-tags">
-                <span>Remote</span>
-                <span>Unpaid</span>
-                <span>2 Months</span>
-              </div>
-
-              <p>
-                Assist in API development and scalable backend systems using
-                Node.js and Express.
-              </p>
-
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
-
-            </div>
-
-            <div className="internship-card">
-
-              <div className="card-top">
-
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
-                  alt="logo"
-                />
-
-              </div>
-
-              <h3>iOS Developer Intern</h3>
-
-              <h4>AppStudio Mobile</h4>
-
-              <div className="card-tags">
-                <span>New York</span>
-                <span>$5,000/mo</span>
-                <span>4 Months</span>
-              </div>
-
-              <p>
-                Help create mobile applications using Swift and modern iOS
-                development practices.
-              </p>
-
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
-
-            </div>
+            ))}
 
           </div>
 
@@ -230,6 +190,7 @@ function Internships() {
             <button className="active-page">1</button>
 
             <button>2</button>
+
             <button>3</button>
 
             <span>...</span>
