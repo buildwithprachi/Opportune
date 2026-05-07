@@ -1,8 +1,127 @@
+import { useEffect, useState, useMemo } from "react"
 import "../styles/Internships.css"
 import Footer from "../components/Footer"
+import { getJobs } from "../jobs"
 
 function Internships() {
+
+  const [jobs, setJobs] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Filter & Sort States
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedRoles, setSelectedRoles] = useState([])
+  const [selectedLocations, setSelectedLocations] = useState([])
+  const [duration, setDuration] = useState("Any Duration")
+  const [minStipend, setMinStipend] = useState(0)
+  const [sortBy, setSortBy] = useState("Most Relevant")
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const jobsPerPage = 9
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+
+      try {
+
+        const result = await getJobs()
+
+        // Generate mock stipend & duration so filters work
+        const enhancedJobs = result.map((job, index) => {
+          const mockStipends = [0, 1500, 3000, 5000, 8000, 12000]
+          const mockDurations = ["1 Month", "3 Months", "6 Months"]
+          
+          return {
+            ...job,
+            mockStipend: mockStipends[index % mockStipends.length],
+            mockDuration: mockDurations[index % mockDurations.length],
+            searchString: `${job.title} ${job.company_name}`.toLowerCase()
+          }
+        })
+
+        console.log("FINAL JOBS:", enhancedJobs)
+
+        setJobs(enhancedJobs)
+
+      } catch (error) {
+
+        console.error("FETCH ERROR:", error)
+
+      } finally {
+
+        setLoading(false)
+
+      }
+
+    }
+
+    fetchData()
+
+  }, [])
+
+  // Filter and sort logic
+  const filteredAndSortedJobs = useMemo(() => {
+    let result = jobs;
+
+    if (searchTerm) {
+      result = result.filter(job => job.searchString.includes(searchTerm.toLowerCase()));
+    }
+
+    if (selectedRoles.length > 0) {
+      result = result.filter(job => 
+        selectedRoles.some(role => job.title.toLowerCase().includes(role.toLowerCase()))
+      );
+    }
+
+    if (selectedLocations.length > 0) {
+      result = result.filter(job => {
+        if (selectedLocations.includes("Remote") && job.remote) return true;
+        return selectedLocations.some(loc => job.location.toLowerCase().includes(loc.toLowerCase()));
+      });
+    }
+
+    if (duration !== "Any Duration") {
+      result = result.filter(job => job.mockDuration === duration);
+    }
+
+    if (minStipend > 0) {
+      result = result.filter(job => job.mockStipend >= minStipend);
+    }
+
+    if (sortBy === "Latest") {
+      result = [...result].sort((a, b) => b.created_at - a.created_at);
+    } else if (sortBy === "Highest Paid") {
+      result = [...result].sort((a, b) => b.mockStipend - a.mockStipend);
+    }
+
+    return result;
+  }, [jobs, searchTerm, selectedRoles, selectedLocations, duration, minStipend, sortBy]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredAndSortedJobs.length / jobsPerPage) || 1;
+  const currentJobs = filteredAndSortedJobs.slice(
+    (currentPage - 1) * jobsPerPage,
+    currentPage * jobsPerPage
+  );
+
+  const handleRoleToggle = (role) => {
+    setSelectedRoles(prev => 
+      prev.includes(role) ? prev.filter(r => r !== role) : [...prev, role]
+    );
+    setCurrentPage(1);
+  };
+
+  const handleLocationToggle = (location) => {
+    setSelectedLocations(prev => 
+      prev.includes(location) ? prev.filter(l => l !== location) : [...prev, location]
+    );
+    setCurrentPage(1);
+  };
+
   return (
+
     <div className="internships-page">
 
       <div className="internships-container">
@@ -14,38 +133,47 @@ function Internships() {
           <div className="filter-group">
             <h4>ROLE</h4>
 
-            <label><input type="checkbox" checked readOnly /> Software Engineering</label>
-            <label><input type="checkbox" /> Data Science</label>
-            <label><input type="checkbox" /> Product Design</label>
-            <label><input type="checkbox" /> Marketing</label>
+            <label><input type="checkbox" checked={selectedRoles.includes("Software Engineering")} onChange={() => handleRoleToggle("Software Engineering")} /> Software Engineering</label>
+            <label><input type="checkbox" checked={selectedRoles.includes("Data Science")} onChange={() => handleRoleToggle("Data Science")} /> Data Science</label>
+            <label><input type="checkbox" checked={selectedRoles.includes("Product Design")} onChange={() => handleRoleToggle("Product Design")} /> Product Design</label>
+            <label><input type="checkbox" checked={selectedRoles.includes("Marketing")} onChange={() => handleRoleToggle("Marketing")} /> Marketing</label>
           </div>
 
           <div className="filter-group">
             <h4>LOCATION</h4>
 
-            <label><input type="checkbox" checked readOnly /> Remote</label>
-            <label><input type="checkbox" /> San Francisco, CA</label>
-            <label><input type="checkbox" /> New York, NY</label>
+            <label><input type="checkbox" checked={selectedLocations.includes("Remote")} onChange={() => handleLocationToggle("Remote")} /> Remote</label>
+            <label><input type="checkbox" checked={selectedLocations.includes("Berlin")} onChange={() => handleLocationToggle("Berlin")} /> Berlin, DE</label>
+            <label><input type="checkbox" checked={selectedLocations.includes("London")} onChange={() => handleLocationToggle("London")} /> London, UK</label>
+            <label><input type="checkbox" checked={selectedLocations.includes("Munich")} onChange={() => handleLocationToggle("Munich")} /> Munich, DE</label>
           </div>
 
           <div className="filter-group">
             <h4>DURATION</h4>
 
-            <select>
-              <option>Any Duration</option>
-              <option>1 Month</option>
-              <option>3 Months</option>
-              <option>6 Months</option>
+            <select value={duration} onChange={(e) => { setDuration(e.target.value); setCurrentPage(1); }}>
+              <option value="Any Duration">Any Duration</option>
+              <option value="1 Month">1 Month</option>
+              <option value="3 Months">3 Months</option>
+              <option value="6 Months">6 Months</option>
             </select>
           </div>
 
           <div className="filter-group">
             <h4>STIPEND RANGE</h4>
 
-            <input type="range" min="0" max="10000" />
+            <input 
+              type="range" 
+              min="0" 
+              max="10000" 
+              step="500"
+              value={minStipend} 
+              onChange={(e) => { setMinStipend(Number(e.target.value)); setCurrentPage(1); }} 
+            />
 
             <div className="stipend-range">
               <span>$0</span>
+              <span style={{ fontWeight: 'bold' }}>${minStipend}+</span>
               <span>$10,000+</span>
             </div>
           </div>
@@ -59,15 +187,17 @@ function Internships() {
             <input
               type="text"
               placeholder="Search by job title, company, or keywords..."
+              value={searchTerm}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
             />
 
             <div className="sort-section">
               <span>Sort by:</span>
 
-              <select>
-                <option>Most Relevant</option>
-                <option>Latest</option>
-                <option>Highest Paid</option>
+              <select value={sortBy} onChange={(e) => { setSortBy(e.target.value); setCurrentPage(1); }}>
+                <option value="Most Relevant">Most Relevant</option>
+                <option value="Latest">Latest</option>
+                <option value="Highest Paid">Highest Paid</option>
               </select>
             </div>
 
@@ -75,170 +205,102 @@ function Internships() {
 
           <div className="internships-header">
 
-            <h1>Software Engineering Internships</h1>
+            <h1>Internships & Jobs</h1>
 
-            <p>Showing 142 results</p>
+            <p>
+              Showing {filteredAndSortedJobs.length} results
+            </p>
 
           </div>
+
+          {loading && <p>Loading internships...</p>}
+
+          {!loading && filteredAndSortedJobs.length === 0 && (
+            <p className="no-results-msg">No internships found matching your filters.</p>
+          )}
 
           <div className="internship-cards">
 
-            <div className="internship-card">
+            {!loading && currentJobs.length > 0 && currentJobs.map((job, index) => (
 
-              <div className="card-top">
+              <div className="internship-card" key={index}>
 
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
-                  alt="logo"
-                />
+                <div className="card-top">
 
-                <span className="tag new">NEW</span>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
+                    alt="logo"
+                  />
 
-              </div>
+                  <span className="tag new">
+                    NEW
+                  </span>
 
-              <h3>Frontend Developer Intern</h3>
+                </div>
 
-              <h4>TechFlow Inc.</h4>
+                <h3>{job.title}</h3>
 
-              <div className="card-tags">
-                <span>Remote</span>
-                <span>$4,000/mo</span>
-                <span>3 Months</span>
-              </div>
+                <h4>{job.company_name}</h4>
 
-              <p>
-                Join our core product team to build responsive user interfaces
-                using React and modern frontend technologies.
-              </p>
+                <div className="card-tags">
 
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
+                  <span>{job.remote ? "Remote" : (job.location.split(',')[0] || "Location N/A")}</span>
 
-            </div>
+                  <span>
+                    {job.mockDuration}
+                  </span>
+                  
+                  <span>
+                    ${job.mockStipend}/mo
+                  </span>
 
-            <div className="internship-card">
+                </div>
 
-              <div className="card-top">
+                <p>
+                  Explore this exciting opportunity and apply
+                  directly through the provided link.
+                </p>
 
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/2721/2721297.png"
-                  alt="logo"
-                />
+                <div className="card-buttons">
 
-                <span className="tag">HOT</span>
+                  <a
+                    href={job.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="apply-btn"
+                  >
+                    Apply Now
+                  </a>
 
-              </div>
-
-              <h3>Machine Learning Intern</h3>
-
-              <h4>DataSys Analytics</h4>
-
-              <div className="card-tags">
-                <span>San Francisco</span>
-                <span>$6,500/mo</span>
-                <span>6 Months</span>
-              </div>
-
-              <p>
-                Help build predictive models and work on next-generation AI
-                systems with our experienced ML team.
-              </p>
-
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
-
-            </div>
-
-            <div className="internship-card">
-
-              <div className="card-top">
-
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
-                  alt="logo"
-                />
-
-                <span className="tag urgent">URGENT</span>
+                </div>
 
               </div>
 
-              <h3>Backend Engineering Intern</h3>
-
-              <h4>CloudNet Solutions</h4>
-
-              <div className="card-tags">
-                <span>Remote</span>
-                <span>Unpaid</span>
-                <span>2 Months</span>
-              </div>
-
-              <p>
-                Assist in API development and scalable backend systems using
-                Node.js and Express.
-              </p>
-
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
-
-            </div>
-
-            <div className="internship-card">
-
-              <div className="card-top">
-
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png"
-                  alt="logo"
-                />
-
-              </div>
-
-              <h3>iOS Developer Intern</h3>
-
-              <h4>AppStudio Mobile</h4>
-
-              <div className="card-tags">
-                <span>New York</span>
-                <span>$5,000/mo</span>
-                <span>4 Months</span>
-              </div>
-
-              <p>
-                Help create mobile applications using Swift and modern iOS
-                development practices.
-              </p>
-
-              <div className="card-buttons">
-                <button className="details-btn">View Details</button>
-                <button className="apply-btn">Apply Now</button>
-              </div>
-
-            </div>
+            ))}
 
           </div>
 
-          <div className="pagination">
+          {!loading && totalPages > 1 && (
+            <div className="pagination">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+              >
+                {"<"}
+              </button>
 
-            <button>{"<"}</button>
+              <button className="active-page">{currentPage}</button>
+              
+              <span style={{ margin: '0 10px', color: '#666', alignSelf: 'center' }}>of {totalPages}</span>
 
-            <button className="active-page">1</button>
-
-            <button>2</button>
-            <button>3</button>
-
-            <span>...</span>
-
-            <button>12</button>
-
-            <button>{">"}</button>
-
-          </div>
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+              >
+                {">"}
+              </button>
+            </div>
+          )}
 
         </main>
 
