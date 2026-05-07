@@ -8,7 +8,7 @@ function Internships() {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Filter & Sort States
+
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedRoles, setSelectedRoles] = useState([])
   const [selectedLocations, setSelectedLocations] = useState([])
@@ -16,7 +16,7 @@ function Internships() {
   const [minStipend, setMinStipend] = useState(0)
   const [sortBy, setSortBy] = useState("Most Relevant")
 
-  // Pagination
+
   const [currentPage, setCurrentPage] = useState(1)
   const jobsPerPage = 9
 
@@ -28,7 +28,7 @@ function Internships() {
 
         const result = await getJobs()
 
-        // Generate mock stipend & duration so filters work
+        
         const enhancedJobs = result.map((job, index) => {
           const mockStipends = [0, 1500, 3000, 5000, 8000, 12000]
           const mockDurations = ["1 Month", "3 Months", "6 Months"]
@@ -61,7 +61,6 @@ function Internships() {
 
   }, [])
 
-  // Filter and sort logic
   const filteredAndSortedJobs = useMemo(() => {
     let result = jobs;
 
@@ -99,7 +98,7 @@ function Internships() {
     return result;
   }, [jobs, searchTerm, selectedRoles, selectedLocations, duration, minStipend, sortBy]);
 
-  // Pagination logic
+
   const totalPages = Math.ceil(filteredAndSortedJobs.length / jobsPerPage) || 1;
   const currentJobs = filteredAndSortedJobs.slice(
     (currentPage - 1) * jobsPerPage,

@@ -13,8 +13,6 @@
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
 
-/* TABS */
-
 .login-tabs {
   display: flex;
 }
@@ -35,8 +33,6 @@
   border-bottom: 3px solid #2563eb !important;
 }
 
-/* CONTENT */
-
 .login-content {
   padding: 45px;
 }
@@ -54,8 +50,6 @@
   margin-bottom: 35px;
   font-size: 17px;
 }
-
-/* FORM */
 
 .login-form {
   display: flex;
@@ -98,8 +92,6 @@
   font-size: 14px;
 }
 
-/* LOGIN BUTTON */
-
 .login-btn {
   background-color: #2563eb;
   color: white;
@@ -115,8 +107,6 @@
 .login-btn:hover {
   background-color: #1d4ed8;
 }
-
-/* DIVIDER */
 
 .divider {
   display: flex;
@@ -137,8 +127,6 @@
 .divider span {
   padding: 0 15px;
 }
-
-/* SOCIAL BUTTONS */
 
 .social-buttons {
   display: flex;

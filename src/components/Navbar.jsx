@@ -8,7 +8,7 @@ function Navbar() {
 
       <div className="nav-links">
 
-        <NavLink to="/">
+        <NavLink to="/home">
           Home
         </NavLink>
 
@@ -18,6 +18,10 @@ function Navbar() {
 
         <NavLink to="/profile">
           Profile
+        </NavLink>
+
+        <NavLink to="/">
+          Login
         </NavLink>
 
       </div>

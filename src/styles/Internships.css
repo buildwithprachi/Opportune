@@ -10,7 +10,6 @@
   align-items: flex-start;
 }
 
-/* FILTER SECTION */
 
 .filters-section {
   width: 280px;
@@ -67,13 +66,9 @@
   font-size: 14px;
 }
 
-/* MAIN CONTENT */
-
 .internships-content {
   flex: 1;
 }
-
-/* SEARCH BAR */
 
 .top-search-bar {
   background-color: white;
@@ -117,8 +112,6 @@
   outline: none;
 }
 
-/* HEADER */
-
 .internships-header {
   margin-bottom: 30px;
 }
@@ -133,8 +126,6 @@
   color: #6b7280;
   font-size: 18px;
 }
-
-/* CARDS */
 
 .internship-cards {
   display: grid;
@@ -216,8 +207,6 @@
   margin-bottom: 25px;
 }
 
-/* BUTTONS */
-
 .card-buttons {
   display: flex;
   gap: 15px;
@@ -245,8 +234,6 @@
   color: white;
 }
 
-/* PAGINATION */
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -269,8 +256,6 @@
   color: white;
   border: none !important;
 }
-
-/* FOOTER */
 
 .internships-footer {
   margin-top: 100px;

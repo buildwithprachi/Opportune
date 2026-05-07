@@ -34,7 +34,7 @@ function Login() {
 
         alert("Login Successful!")
 
-        navigate("/profile")
+        navigate("/home")
     }
 
     return (
