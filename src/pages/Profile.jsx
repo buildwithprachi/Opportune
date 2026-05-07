@@ -18,11 +18,11 @@ function Profile() {
 
             <div className="profile-info">
 
-              <h1>Elena Rostova</h1>
+              <h1>Deepali Aggarwal</h1>
 
-              <h3>Computer Science Senior @ Tech University</h3>
+              <h3>Computer Science AI Student @ Newton School of Technology</h3>
 
-              <p>San Francisco, CA (Open to Remote)</p>
+              <p>Delhi, NCR, IN (Open to Remote)</p>
 
             </div>
 
@@ -32,11 +32,17 @@ function Profile() {
 
           <div className="profile-links">
 
-            <span>elena.rostova@student.edu</span>
+            <a href="deepali.a25134@nst.rishihood.edu.in" target="_blank" rel="noopener noreferrer">
+              Mail
+            </a>
 
-            <span>linkedin.com/in/elenarostova</span>
+            <a href="https://www.linkedin.com/in/deepali-aggarwal-b54066368/" target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
 
-            <span>github.com/elena-codes</span>
+            <a href="https://github.com/deepaliaggarwal856-hub" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
 
           </div>
 

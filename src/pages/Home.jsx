@@ -1,5 +1,6 @@
 import JobCard from "../components/JobCard"
 import Footer from "../components/Footer"
+import { Link } from "react-router-dom"
 import "../styles/Home.css"
 
 function Home() {
@@ -17,9 +18,11 @@ function Home() {
             interests and skills. Connect with top companies and take the first step towards your professional future.
           </p>
 
-          <button class="explore-btn">
-            Explore Internships
-          </button>
+          <Link to="/internships">
+            <button className="explore-btn">
+              Explore Internships
+            </button>
+          </Link>
 
         </div>
 

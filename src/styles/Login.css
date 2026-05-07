@@ -160,3 +160,9 @@
 .social-buttons button:hover {
   background-color: #f9fafb;
 }
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+}

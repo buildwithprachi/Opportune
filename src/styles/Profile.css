@@ -4,8 +4,6 @@
   padding: 40px;
 }
 
-/* TOP SECTION */
-
 .profile-top {
   display: flex;
   gap: 30px;
@@ -76,8 +74,6 @@
   color: #4b5563;
 }
 
-/* STRENGTH CARD */
-
 .strength-card {
   flex: 1;
   background: linear-gradient(to bottom right, #2563eb, #1d4ed8);
@@ -128,8 +124,6 @@
   cursor: pointer;
 }
 
-/* MAIN CONTENT */
-
 .profile-content {
   display: flex;
   gap: 30px;
@@ -149,8 +143,6 @@
   gap: 30px;
 }
 
-/* COMMON CARD STYLE */
-
 .resume-card,
 .skills-card,
 .experience-card,
@@ -169,8 +161,6 @@
   color: #111827;
   margin-bottom: 25px;
 }
-
-/* RESUME */
 
 .resume-upload {
   border: 2px dashed #d1d5db;
@@ -197,8 +187,6 @@
   color: #374151;
 }
 
-/* SKILLS */
-
 .skills-group {
   display: flex;
   flex-wrap: wrap;
@@ -213,8 +201,6 @@
   font-size: 15px;
   font-weight: 500;
 }
-
-/* EXPERIENCE */
 
 .experience-item {
   margin-bottom: 35px;
@@ -251,8 +237,6 @@
   line-height: 1.8;
   font-size: 16px;
 }
-
-/* EDUCATION */
 
 .education-content {
   display: flex;
