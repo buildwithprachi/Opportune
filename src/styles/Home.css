@@ -69,6 +69,29 @@
   color: #111827;
 }
 
+.jobs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.see-more-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.see-more-btn:hover {
+  background-color: #1d4ed8;
+}
+
 .jobs-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
